@@ -1,0 +1,40 @@
+
+@font-face {
+  font-family: "Inter-Regular";
+  src: url("/assets/fonts/Inter-Regular.woff2");
+}
+@font-face {
+  font-family: "farsi-digit";
+  src: url("/assets/fonts/farsi-digit.woff2");
+}
+html {
+  overflow-x: hidden;
+  overflow-y: scroll;
+  line-height: 1.5;
+  font-family: "Inter-Regular", "farsi-digit";
+  max-width: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: normal;
+  font-family: "Inter-Regular", "farsi-digit";
+  overflow-y: scroll;
+  overflow-x: hidden;
+  &.modal-open {
+    .custom-scroll {
+      overflow-y: hidden;
+      overflow-x: hidden;
+    }
+  }
+}
+.main-app {
+    padding: 16px !important;
+}
+.v-input {
+    .v-input__details {
+        display: none;
+    }
+}
