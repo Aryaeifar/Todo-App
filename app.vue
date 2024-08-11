@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout>
     <v-app>
-       <NuxtLoadingIndicator color="red" />
+       <NuxtLoadingIndicator color="black" />
       <NuxtPage />
     </v-app>
   </NuxtLayout>

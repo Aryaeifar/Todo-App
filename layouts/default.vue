@@ -9,41 +9,24 @@ const sidebar = [
   },
   {
     tooltip: "To do",
-    icon: "check-all",
+    icon: "square-rounded-badge",
     title: "Todo list",
     value: "todo",
     link: "/todo",
+  },
+  {
+    tooltip: "Done",
+    icon: "check-all",
+    title: "Done",
+    value: "done",
+    link: "/done",
   },
 ];
 </script>
 <template>
   <v-card>
     <v-layout>
-      <v-navigation-drawer rail>
-        <v-list>
-          <v-list-item
-            prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
-            subtitle="aryaeifar12@gmail.com"
-            title="Ali aryaei"
-          ></v-list-item>
-        </v-list>
-
-        <v-divider></v-divider>
-
-        <v-list density="compact" nav>
-          <v-tooltip :text="item.tooltip" v-for="(item, i) in sidebar" :key="i">
-            <template v-slot:activator="{ props }">
-              <v-list-item
-                :prepend-icon="'mdi-' + item.icon"
-                :title="item.title"
-                :value="item.value"
-                :to="item.link"
-                v-bind="props"
-              ></v-list-item>
-            </template>
-          </v-tooltip>
-        </v-list>
-      </v-navigation-drawer>
+      <WidgetsBaseSidebar :items="sidebar" />
 
       <v-main style="height: 100%">
         <div class="main-app">

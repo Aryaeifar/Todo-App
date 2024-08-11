@@ -8,6 +8,9 @@ export default defineNuxtConfig({
     head: {
       charset: "utf-8",
       title: "Todo App",
+      meta: [
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+      ],
     },
   },
   css: [
@@ -15,6 +18,16 @@ export default defineNuxtConfig({
     "@mdi/font/css/materialdesignicons.min.css",
     "@/assets/scss/app.scss",
   ],
+  runtimeConfig: {
+    public: {
+      flashMessage: {
+        rtl: true,
+        time: 5000,
+        strategy: "multiple",
+        position: "left bottom",
+      },
+    },
+  },
   build: {
     transpile: ["vuetify"],
   },
