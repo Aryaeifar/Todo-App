@@ -5,6 +5,9 @@
       <NuxtPage />
     </v-app>
   </NuxtLayout>
+   <Teleport to="body">
+    <FlashMessage position="right bottom" />
+  </Teleport>
 </template>
 <style>
 .layout-enter-active,

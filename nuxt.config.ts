@@ -21,10 +21,10 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       flashMessage: {
-        rtl: true,
+        rtl: false,
         time: 5000,
         strategy: "multiple",
-        position: "left bottom",
+        position: "right bottom",
       },
     },
   },

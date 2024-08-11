@@ -1,4 +1,6 @@
 <script setup>
+const { $flashMsg } = useNuxtApp();
+
 const props = defineProps({
   todo: {
     type: Object,
@@ -7,14 +9,26 @@ const props = defineProps({
 const emit = defineEmits(["delete-todo", "done-todo"]);
 // const checkbox = ref(props.todo.done);
 
-
 const deleteTodo = () => {
+  $flashMsg.error({
+    text: `${props.todo.text} task has been removed`,
+  });
   emit("delete-todo");
 };
 const doneTodo = () => {
-  props.todo.done = !props.todo.done; 
+  if (props.todo.done) {
+    $flashMsg.success({
+      text: `${props.todo.text} task has been completed`,
+    });
+  } else {
+    $flashMsg.error({
+      text: `${props.todo.text} task has not been completed`,
+    });
+  }
+
+  props.todo.done = !props.todo.done;
   emit("done-todo", props.todo.done);
-}
+};
 </script>
 
 <template>

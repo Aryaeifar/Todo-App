@@ -1,11 +1,16 @@
 <script setup>
+const { $flashMsg } = useNuxtApp();
 const emit = defineEmits([["add-todo"]]);
 const addInput = ref("");
 const emitAddTodo = () => {
   if (addInput.value.trim()) {
+    $flashMsg.success({
+      text: `${addInput.value} task has been added to the task list`,
+    });
     emit("add-todo", addInput.value);
+
     addInput.value = "";
-  } 
+  }
 };
 </script>
 <template>
@@ -17,7 +22,9 @@ const emitAddTodo = () => {
       v-model="addInput"
       @keyup.enter="emitAddTodo"
     ></v-text-field>
-    <v-btn variant="outlined" @click="emitAddTodo"  :disabled="!addInput" >Add</v-btn>
+    <v-btn variant="outlined" @click="emitAddTodo" :disabled="!addInput"
+      >Add</v-btn
+    >
   </div>
 </template>
 
