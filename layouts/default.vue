@@ -15,11 +15,11 @@ const sidebar = [
     link: "/todo",
   },
   {
-    tooltip: "Done",
-    icon: "check-all",
-    title: "Done",
-    value: "done",
-    link: "/done",
+    tooltip: "Log",
+    icon: "information-outline",
+    title: "Log",
+    value: "log",
+    link: "/log",
   },
 ];
 </script>

@@ -4,11 +4,11 @@ onMounted(() => {
   const storageTodo = JSON.parse(localStorage.getItem("todo")) || [];
   todo.value = storageTodo;
 });
-
 const addTodo = (newTask) => {
   todo.value.push({
     text: newTask,
     done: false,
+    date: null,
   });
   updateStorage();
 };
@@ -18,6 +18,27 @@ const onDeleteTodo = (i) => {
 };
 const toggleDone = (i) => {
   todo.value[i].done = !todo.value[i].done;
+  if (todo.value[i].done) {
+    let currentdate = new Date();
+    let datetime =
+      "Task is done in " +
+      currentdate.getDate() +
+      "/" +
+      (currentdate.getMonth() + 1) +
+      "/" +
+      currentdate.getFullYear() +
+      " | " +
+      currentdate.getHours() +
+      ":" +
+      currentdate.getMinutes() +
+      ":" +
+      currentdate.getSeconds();
+
+    todo.value[i].date = datetime;
+    console.log(datetime);
+  } else {
+    todo.value[i].null;
+  }
   updateStorage();
 };
 
@@ -53,6 +74,7 @@ watch(todo, (newVal) => {
           :todo="item"
           @delete-todo="onDeleteTodo(i)"
           @done-todo="toggleDone(i)"
+          :isTodo="false"
         />
       </transition-group>
     </div>
