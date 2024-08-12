@@ -6,10 +6,11 @@ const totalHour = ref("00");
 const totalCounterSec = ref("00");
 onMounted(() => {
   const storageTodo = JSON.parse(localStorage.getItem("todo")) || [];
-
   todo.value = storageTodo;
   calcTime();
 });
+// Add todo
+
 const addTodo = (newTask) => {
   const taskId = Date.now();
   todo.value.push({
@@ -18,10 +19,13 @@ const addTodo = (newTask) => {
     done: false,
     date: null,
     sec: 0,
+    color: "#000000",
   });
   updateStorage();
   calcTime();
 };
+
+// update timer
 function pad(val) {
   return val > 9 ? val : "0" + val;
 }
@@ -30,12 +34,28 @@ const onUpdateCounter = (i, sec) => {
   updateStorage();
   calcTime();
 };
+const calcTime = () => {
+  totalSec.value = todo.value.reduce((acc, task) => acc + task.sec, 0);
+  totalHour.value = pad(Math.floor(totalSec.value / 3600));
+  totalMinute.value = pad(Math.floor(totalSec.value / 60) % 60);
+  totalCounterSec.value = pad(totalSec.value % 60);
+};
 
+// delete to do
 const onDeleteTodo = (i) => {
   todo.value.splice(i, 1);
   updateStorage();
   calcTime();
 };
+
+// update color
+const onUpdateColor = (i, color) => {
+  todo.value[i].color = color;
+  console.log(todo.value[i].color)
+  updateStorage();
+};
+
+// update done
 const toggleDone = (i) => {
   todo.value[i].done = !todo.value[i].done;
   if (todo.value[i].done) {
@@ -64,16 +84,11 @@ const toggleDone = (i) => {
 const updateStorage = () => {
   localStorage.setItem("todo", JSON.stringify(todo.value));
 };
-
 watch(todo, (newVal) => {
   localStorage.setItem("todo", JSON.stringify(newVal));
 });
-const calcTime = () => {
-  totalSec.value = todo.value.reduce((acc, task) => acc + task.sec, 0);
-  totalHour.value = pad(Math.floor(totalSec.value / 3600));
-  totalMinute.value = pad(Math.floor(totalSec.value / 60) % 60);
-  totalCounterSec.value = pad(totalSec.value % 60);
-};
+
+
 </script>
 
 <template>
@@ -92,20 +107,19 @@ const calcTime = () => {
       >
         <h2>There is no task yet</h2>
       </div>
-        <v-row>
-          <v-col cols="12" lg="3" v-for="(item, i) in todo" :key="i">
-            <FormCheckboxCard
-              :todo="item"
-              @delete-todo="onDeleteTodo(i)"
-              @done-todo="toggleDone(i)"
-              @counter-update="onUpdateCounter(i, $event)"
-              :isTodo="false"
-            />
-          </v-col>
-        </v-row>
+      <v-row>
+        <v-col cols="12" lg="3" v-for="(item, i) in todo" :key="i">
+          <FormCheckboxCard
+            :todo="item"
+            @delete-todo="onDeleteTodo(i)"
+            @done-todo="toggleDone(i)"
+            @counter-update="onUpdateCounter(i, $event)"
+            @color-update="onUpdateColor(i, $event)"
+            :isTodo="false"
+          />
+        </v-col>
+      </v-row>
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>
