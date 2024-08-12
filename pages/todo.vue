@@ -1,9 +1,11 @@
 <script setup>
+import draggable from "vuedraggable";
 const todo = ref([]);
 const totalSec = ref(0);
 const totalMinute = ref("00");
 const totalHour = ref("00");
 const totalCounterSec = ref("00");
+
 onMounted(() => {
   const storageTodo = JSON.parse(localStorage.getItem("todo")) || [];
   todo.value = storageTodo;
@@ -51,7 +53,7 @@ const onDeleteTodo = (i) => {
 // update color
 const onUpdateColor = (i, color) => {
   todo.value[i].color = color;
-  console.log(todo.value[i].color)
+  console.log(todo.value[i].color);
   updateStorage();
 };
 
@@ -87,8 +89,7 @@ const updateStorage = () => {
 watch(todo, (newVal) => {
   localStorage.setItem("todo", JSON.stringify(newVal));
 });
-
-
+const dragging = ref(false);
 </script>
 
 <template>
@@ -108,18 +109,52 @@ watch(todo, (newVal) => {
         <h2>There is no task yet</h2>
       </div>
       <v-row>
-        <v-col cols="12" lg="3" v-for="(item, i) in todo" :key="i">
-          <FormCheckboxCard
-            :todo="item"
-            @delete-todo="onDeleteTodo(i)"
-            @done-todo="toggleDone(i)"
-            @counter-update="onUpdateCounter(i, $event)"
-            @color-update="onUpdateColor(i, $event)"
-            :isTodo="false"
-          />
-        </v-col>
+        <draggable
+          v-model="todo"
+          item-key="id"
+          class="list-group"
+          ghost-class="ghost"
+          :move="checkMove"
+          @start="onStart"
+          @end="onEnd"
+        >
+          <template #item="{ element }">
+            <v-col cols="12" sm="6" md="4" lg="3">
+              <FormCheckboxCard
+                :todo="element"
+                @delete-todo="onDeleteTodo(i)"
+                @done-todo="toggleDone(i)"
+                @counter-update="onUpdateCounter(i, $event)"
+                @color-update="onUpdateColor(i, $event)"
+                :isTodo="false"
+              />
+            </v-col>
+          </template>
+        </draggable>
       </v-row>
+
+      <!-- <v-row>
+          <v-col cols="12" lg="3" v-for="(item, i) in todo" :key="i">
+            <FormCheckboxCard
+              :todo="item"
+              @delete-todo="onDeleteTodo(i)"
+              @done-todo="toggleDone(i)"
+              @counter-update="onUpdateCounter(i, $event)"
+              @color-update="onUpdateColor(i, $event)"
+              :isTodo="false"
+            />
+          </v-col>
+        </v-row> -->
     </div>
   </div>
 </template>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.list-group {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+.ghost {
+  opacity: 0.5;
+}
+</style>

@@ -14,7 +14,8 @@
     "@smartweb/vue-flash-message": "^1.0.0-alpha.12",
     "nuxt": "^3.12.4",
     "sass": "^1.77.8",
-    "vue": "latest"
+    "vue": "latest",
+    "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
     "vite-plugin-vuetify": "^2.0.4",

@@ -9,7 +9,12 @@ const props = defineProps({
     default: true,
   },
 });
-const emit = defineEmits(["delete-todo", "done-todo", "counter-update", "color-update"]);
+const emit = defineEmits([
+  "delete-todo",
+  "done-todo",
+  "counter-update",
+  "color-update",
+]);
 
 // delete todo
 
@@ -98,10 +103,10 @@ onMounted(() => {
 
 // Update color
 
-const inputColor = ref(props.todo.color || '#000000'); 
+const inputColor = ref(props.todo.color || "#000000");
 const updateColor = () => {
-  emit("color-update", inputColor.value)
-}
+  emit("color-update", inputColor.value);
+};
 watch(inputColor, (newColor) => {
   inputColor.value = newColor;
 });
@@ -111,16 +116,23 @@ watch(inputColor, (newColor) => {
   <v-card
     variant="outlined"
     class="todo-card rounded-lg h-100 d-flex flex-column justify-space-between"
-    :style="{ borderColor: inputColor, borderWidth:'3px', borderStyle:'solid' }"
+    :style="{
+      borderColor: inputColor,
+      borderWidth: '3px',
+      borderStyle: 'solid',
+    }"
   >
     <v-card-title>
-      <v-checkbox v-model="props.todo.done" @change="doneTodo" v-if="!isTodo">
-        <template v-slot:label>
-          <div :class="props.todo.done ? 'text-decoration-line-through' : ''">
-            {{ todo.text }}
-          </div>
-        </template>
-      </v-checkbox>
+      <div v-if="!isTodo" class="d-flex justify-space-between align-center">
+        <v-checkbox v-model="props.todo.done" @change="doneTodo">
+          <template v-slot:label>
+            <div :class="props.todo.done ? 'text-decoration-line-through' : ''">
+              {{ todo.text }}
+            </div>
+          </template>
+        </v-checkbox>
+        <v-icon icon="mdi-drag-horizontal" class="drag-icon"></v-icon>
+      </div>
       <div v-else>
         {{ todo.text }}
       </div>
@@ -162,7 +174,14 @@ watch(inputColor, (newColor) => {
               </template>
             </v-tooltip>
           </div>
-           <input type="color" id="favcolor" name="favcolor"  class="color-picker mr-1" @change="updateColor" v-model="inputColor"> 
+          <input
+            type="color"
+            id="favcolor"
+            name="favcolor"
+            class="color-picker mr-1"
+            @change="updateColor"
+            v-model="inputColor"
+          />
           <v-tooltip text="Delete" location="bottom">
             <template v-slot:activator="{ props }">
               <v-icon
