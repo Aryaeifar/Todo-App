@@ -31,8 +31,8 @@ const addTodo = (newTask) => {
 function pad(val) {
   return val > 9 ? val : "0" + val;
 }
-const onUpdateCounter = (i, sec) => {
-  todo.value[i].sec = sec;
+const onUpdateCounter = (element, sec) => {
+  element.sec = sec;
   updateStorage();
   calcTime();
 };
@@ -44,23 +44,22 @@ const calcTime = () => {
 };
 
 // delete to do
-const onDeleteTodo = (i) => {
-  todo.value.splice(i, 1);
+const onDeleteTodo = (element) => {
+  todo.value = todo.value.filter((task) => task.id !== element.id);
   updateStorage();
   calcTime();
 };
 
 // update color
-const onUpdateColor = (i, color) => {
-  todo.value[i].color = color;
-  console.log(todo.value[i].color);
+const onUpdateColor = (element, color) => {
+   element.color = color;
   updateStorage();
 };
 
 // update done
-const toggleDone = (i) => {
-  todo.value[i].done = !todo.value[i].done;
-  if (todo.value[i].done) {
+const toggleDone = (element) => {
+  element.done = !element.done;
+  if (element.done) {
     let currentdate = new Date();
     let datetime =
       "Task is done in " +
@@ -76,9 +75,9 @@ const toggleDone = (i) => {
       ":" +
       currentdate.getSeconds();
 
-    todo.value[i].date = datetime;
+    element.date  = datetime;
   } else {
-    todo.value[i].null;
+    element.date = null;
   }
   updateStorage();
 };
@@ -122,10 +121,10 @@ const dragging = ref(false);
             <v-col cols="12" sm="6" md="4" lg="3">
               <FormCheckboxCard
                 :todo="element"
-                @delete-todo="onDeleteTodo(i)"
-                @done-todo="toggleDone(i)"
-                @counter-update="onUpdateCounter(i, $event)"
-                @color-update="onUpdateColor(i, $event)"
+                @delete-todo="onDeleteTodo(element)"
+                @done-todo="toggleDone(element)"
+                @counter-update="onUpdateCounter(element, $event)"
+                @color-update="onUpdateColor(element, $event)"
                 :isTodo="false"
               />
             </v-col>
