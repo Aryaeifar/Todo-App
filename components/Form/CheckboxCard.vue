@@ -73,9 +73,7 @@ function pauseTimer() {
   );
 }
 onMounted(() => {
-  const storedTime = JSON.parse(
-    localStorage.getItem(`${props.todo.id}-timer`)
-  );
+  const storedTime = JSON.parse(localStorage.getItem(`${props.todo.id}-timer`));
   if (storedTime) {
     sec.value = storedTime.sec || 0;
     isCounting.value = storedTime.isCounting || false;
@@ -91,10 +89,8 @@ onMounted(() => {
 </script>
 
 <template>
-  <div
-    class="todo-card rounded border pa-1 mb-3 d-flex justify-space-between align-center"
-  >
-    <div class="d-flex align-center ms-3">
+  <v-card variant="outlined" class="todo-card">
+    <v-card-title>
       <v-checkbox v-model="props.todo.done" @change="doneTodo" v-if="!isTodo">
         <template v-slot:label>
           <div :class="props.todo.done ? 'text-decoration-line-through' : ''">
@@ -105,40 +101,43 @@ onMounted(() => {
       <div v-else>
         {{ todo.text }}
       </div>
-    </div>
-    <div>
-      <div class="d-flex align-center" v-if="!isTodo">
-        <div class="d-flex align-center">
-          <div>
+    </v-card-title>
+    <v-card-item>
+      <div class="d-flex align-center justify-space-between" v-if="!isTodo">
+          <div class="ms-3">
             <span>{{ hours }}</span
             >:<span>{{ minutes }}</span
             >:<span>{{ seconds }}</span>
           </div>
-          <v-btn v-if="!isCounting" flat class="ms-2" @click="startTimer">
-            <v-icon icon="mdi-play" color="black" v-bind="props"></v-icon>
+        <div  class="d-flex align-center">
+          <div>
+            <v-btn v-if="!isCounting" flat class="ms-2" @click="startTimer" size="small">
+              <v-icon icon="mdi-play" color="black" v-bind="props"></v-icon>
+            </v-btn>
+            <v-btn class="ms-2" flat v-else-if="isCounting" @click="pauseTimer" size="small">
+              <v-icon icon="mdi-pause" color="black" v-bind="props"></v-icon>
+            </v-btn>
+          </div>
+          <v-btn flat @click="deleteTodo" size="small">
+            <v-tooltip text="Delete" location="bottom">
+              <template v-slot:activator="{ props }">
+                <v-icon
+                  icon="mdi-delete-empty"
+                  color="red"
+                  v-bind="props"
+                ></v-icon>
+              </template>
+            </v-tooltip>
           </v-btn>
-          <v-btn class="ms-2" flat v-else-if="isCounting" @click="pauseTimer">
-            <v-icon icon="mdi-pause" color="black" v-bind="props"></v-icon>
-          </v-btn>
+          
         </div>
-        <v-btn flat @click="deleteTodo">
-          <v-tooltip text="Delete" location="bottom">
-            <template v-slot:activator="{ props }">
-              <v-icon
-                icon="mdi-delete-empty"
-                color="red"
-                v-bind="props"
-              ></v-icon>
-            </template>
-          </v-tooltip>
-        </v-btn>
       </div>
 
       <div v-else>
         {{ todo.date }}
       </div>
-    </div>
-  </div>
+    </v-card-item>
+  </v-card>
 </template>
 
 <style lang="scss" scoped></style>

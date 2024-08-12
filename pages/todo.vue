@@ -6,22 +6,22 @@ const totalHour = ref("00");
 const totalCounterSec = ref("00");
 onMounted(() => {
   const storageTodo = JSON.parse(localStorage.getItem("todo")) || [];
-    console.log(storageTodo)
+  console.log(storageTodo);
 
   todo.value = storageTodo;
   calcTime();
 });
 const addTodo = (newTask) => {
-  const taskId = Date.now()
+  const taskId = Date.now();
   todo.value.push({
-    id:taskId,
+    id: taskId,
     text: newTask,
     done: false,
     date: null,
     sec: 0,
   });
   updateStorage();
-  calcTime()
+  calcTime();
 };
 function pad(val) {
   return val > 9 ? val : "0" + val;
@@ -83,8 +83,6 @@ const calcTime = () => {
     <h1 class="mb-3">Todo App</h1>
     <div class="mb-6">
       <h2 class="mb-3">Add your task</h2>
-            Total Time: {{ totalHour }}:{{ totalMinute }}:{{ totalCounterSec }}
-
       <FormAddInput @add-todo="addTodo" />
     </div>
     <div class="mb-6">
@@ -97,15 +95,17 @@ const calcTime = () => {
         <h2>There is no task yet</h2>
       </div>
       <transition-group name="list" tag="div">
-        <FormCheckboxCard
-          v-for="(item, i) in todo"
-          :key="i"
-          :todo="item"
-          @delete-todo="onDeleteTodo(i)"
-          @done-todo="toggleDone(i)"
-          @counter-update="onUpdateCounter(i, $event)"
-          :isTodo="false"
-        />
+        <v-row>
+          <v-col cols="12" lg="3" v-for="(item, i) in todo" :key="i">
+              <FormCheckboxCard
+                :todo="item"
+                @delete-todo="onDeleteTodo(i)"
+                @done-todo="toggleDone(i)"
+                @counter-update="onUpdateCounter(i, $event)"
+                :isTodo="false"
+              />
+          </v-col>
+        </v-row>
       </transition-group>
     </div>
   </div>

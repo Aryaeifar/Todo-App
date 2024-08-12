@@ -24,6 +24,7 @@ onMounted(() => {
           :key="i"
           :todo="item"
           @delete-todo="onDeleteTodo(i)"
+          class="mb-3"
         />
       </transition-group>
     </div>
