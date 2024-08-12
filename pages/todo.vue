@@ -1,20 +1,41 @@
 <script setup>
 const todo = ref([]);
+const totalSec = ref(0);
+const totalMinute = ref("00");
+const totalHour = ref("00");
+const totalCounterSec = ref("00");
 onMounted(() => {
   const storageTodo = JSON.parse(localStorage.getItem("todo")) || [];
+    console.log(storageTodo)
+
   todo.value = storageTodo;
+  calcTime();
 });
 const addTodo = (newTask) => {
+  const taskId = Date.now()
   todo.value.push({
+    id:taskId,
     text: newTask,
     done: false,
     date: null,
+    sec: 0,
   });
   updateStorage();
+  calcTime()
 };
+function pad(val) {
+  return val > 9 ? val : "0" + val;
+}
+const onUpdateCounter = (i, sec) => {
+  todo.value[i].sec = sec;
+  updateStorage();
+  calcTime();
+};
+
 const onDeleteTodo = (i) => {
   todo.value.splice(i, 1);
   updateStorage();
+  calcTime();
 };
 const toggleDone = (i) => {
   todo.value[i].done = !todo.value[i].done;
@@ -49,6 +70,12 @@ const updateStorage = () => {
 watch(todo, (newVal) => {
   localStorage.setItem("todo", JSON.stringify(newVal));
 });
+const calcTime = () => {
+  totalSec.value = todo.value.reduce((acc, task) => acc + task.sec, 0);
+  totalHour.value = pad(Math.floor(totalSec.value / 3600));
+  totalMinute.value = pad(Math.floor(totalSec.value / 60) % 60);
+  totalCounterSec.value = pad(totalSec.value % 60);
+};
 </script>
 
 <template>
@@ -56,6 +83,8 @@ watch(todo, (newVal) => {
     <h1 class="mb-3">Todo App</h1>
     <div class="mb-6">
       <h2 class="mb-3">Add your task</h2>
+            Total Time: {{ totalHour }}:{{ totalMinute }}:{{ totalCounterSec }}
+
       <FormAddInput @add-todo="addTodo" />
     </div>
     <div class="mb-6">
@@ -74,6 +103,7 @@ watch(todo, (newVal) => {
           :todo="item"
           @delete-todo="onDeleteTodo(i)"
           @done-todo="toggleDone(i)"
+          @counter-update="onUpdateCounter(i, $event)"
           :isTodo="false"
         />
       </transition-group>

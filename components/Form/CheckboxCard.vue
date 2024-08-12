@@ -9,7 +9,7 @@ const props = defineProps({
     default: true,
   },
 });
-const emit = defineEmits(["delete-todo", "done-todo"]);
+const emit = defineEmits(["delete-todo", "done-todo", "counter-update"]);
 const deleteTodo = () => {
   $flashMsg.error({
     text: `${props.todo.text} task has been removed`,
@@ -29,7 +29,7 @@ const doneTodo = () => {
   props.todo.done = !props.todo.done;
   emit("done-todo", props.todo.done);
 };
-const sec = ref(-1);
+const sec = ref(0);
 const hours = ref("00");
 const minutes = ref("00");
 const seconds = ref("00");
@@ -44,8 +44,9 @@ function updateTime() {
   seconds.value = pad(sec.value % 60);
   minutes.value = pad(Math.floor(sec.value / 60) % 60);
   hours.value = pad(Math.floor(sec.value / 3600));
+  emit("counter-update", sec.value);
   localStorage.setItem(
-    `${props.todo.text}-timer`,
+    `${props.todo.id}-timer`,
     JSON.stringify({ sec: sec.value, isCounting: isCounting.value })
   );
 }
@@ -65,14 +66,15 @@ function pauseTimer() {
   });
 
   clearInterval(interval);
+  emit("counter-update", sec.value);
   localStorage.setItem(
-    `${props.todo.text}-timer`,
+    `${props.todo.id}-timer`,
     JSON.stringify({ sec: sec.value, isCounting: isCounting.value })
   );
 }
 onMounted(() => {
   const storedTime = JSON.parse(
-    localStorage.getItem(`${props.todo.text}-timer`)
+    localStorage.getItem(`${props.todo.id}-timer`)
   );
   if (storedTime) {
     sec.value = storedTime.sec || 0;
@@ -80,6 +82,7 @@ onMounted(() => {
     seconds.value = pad(sec.value % 60);
     minutes.value = pad(Math.floor(sec.value / 60) % 60);
     hours.value = pad(Math.floor(sec.value / 3600));
+    emit("counter-update", sec.value);
     if (isCounting.value) {
       interval = setInterval(updateTime, 1000);
     }
