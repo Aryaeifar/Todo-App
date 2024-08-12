@@ -132,19 +132,6 @@ const dragging = ref(false);
           </template>
         </draggable>
       </v-row>
-
-      <!-- <v-row>
-          <v-col cols="12" lg="3" v-for="(item, i) in todo" :key="i">
-            <FormCheckboxCard
-              :todo="item"
-              @delete-todo="onDeleteTodo(i)"
-              @done-todo="toggleDone(i)"
-              @counter-update="onUpdateCounter(i, $event)"
-              @color-update="onUpdateColor(i, $event)"
-              :isTodo="false"
-            />
-          </v-col>
-        </v-row> -->
     </div>
   </div>
 </template>
