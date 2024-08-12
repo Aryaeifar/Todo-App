@@ -29,12 +29,20 @@ onMounted(() => {
   <div>
     <h1>To-do App</h1>
     <h2 class="mb-3">Organize your work and life, finally.</h2>
-    <h3 class="text-subtitle-1">
-      Type just about anything into the task field and To-do App one-of-its-kind
-      natural language recognition will instantly fill your to-do list.
+    <h3 class="text-subtitle-1 mb-3">
+      To-do App makes it frictionless to get all your tasks out of your head and organized in one trusted place.
     </h3>
+    <div class="">
+        <h3>Benefits of To-do App</h3>
+        <ul class="px-3 pb-3">
+            <li>Organize, prioritize, and get things done</li>
+            <li>Focus on the right things at the right time</li>
+            <li>Same project, flexible views</li>
+            <li>Collaboration made easy</li>
+        </ul>
+    </div>
     <div class="mt-6">
-      <h1 class="mb-3">the way you came</h1>
+      <h2 class="mb-3">The way you came</h2>
       <v-row>
         <v-col cols="12" lg="4">
           <v-card class="pa-3 rounded-lg" variant="outlined">

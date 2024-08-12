@@ -6,7 +6,6 @@ const totalHour = ref("00");
 const totalCounterSec = ref("00");
 onMounted(() => {
   const storageTodo = JSON.parse(localStorage.getItem("todo")) || [];
-  console.log(storageTodo);
 
   todo.value = storageTodo;
   calcTime();
@@ -56,7 +55,6 @@ const toggleDone = (i) => {
       currentdate.getSeconds();
 
     todo.value[i].date = datetime;
-    console.log(datetime);
   } else {
     todo.value[i].null;
   }
@@ -94,30 +92,20 @@ const calcTime = () => {
       >
         <h2>There is no task yet</h2>
       </div>
-      <transition-group name="list" tag="div">
         <v-row>
           <v-col cols="12" lg="3" v-for="(item, i) in todo" :key="i">
-              <FormCheckboxCard
-                :todo="item"
-                @delete-todo="onDeleteTodo(i)"
-                @done-todo="toggleDone(i)"
-                @counter-update="onUpdateCounter(i, $event)"
-                :isTodo="false"
-              />
+            <FormCheckboxCard
+              :todo="item"
+              @delete-todo="onDeleteTodo(i)"
+              @done-todo="toggleDone(i)"
+              @counter-update="onUpdateCounter(i, $event)"
+              :isTodo="false"
+            />
           </v-col>
         </v-row>
-      </transition-group>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
-.list-enter-active,
-.list-leave-active {
-  transition: all 0.5s ease;
-}
-.list-enter-from,
-.list-leave-to {
-  opacity: 0;
-  transform: translateX(30px);
-}
+
 </style>

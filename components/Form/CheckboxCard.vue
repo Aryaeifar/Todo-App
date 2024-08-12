@@ -89,7 +89,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <v-card variant="outlined" class="todo-card">
+  <v-card variant="outlined" class="todo-card rounded-lg">
     <v-card-title>
       <v-checkbox v-model="props.todo.done" @change="doneTodo" v-if="!isTodo">
         <template v-slot:label>
