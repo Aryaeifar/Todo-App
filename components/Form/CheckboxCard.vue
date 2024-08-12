@@ -33,8 +33,8 @@ const sec = ref(-1);
 const hours = ref("00");
 const minutes = ref("00");
 const seconds = ref("00");
-const isRunning = ref(false);
-let intervalId = null;
+const isCounting = ref(false);
+let interval = null;
 function pad(val) {
   return val > 9 ? val : "0" + val;
 }
@@ -44,17 +44,47 @@ function updateTime() {
   seconds.value = pad(sec.value % 60);
   minutes.value = pad(Math.floor(sec.value / 60) % 60);
   hours.value = pad(Math.floor(sec.value / 3600));
+  localStorage.setItem(
+    `${props.todo.text}-timer`,
+    JSON.stringify({ sec: sec.value, isCounting: isCounting.value })
+  );
 }
 function startTimer() {
-  if (!isRunning.value) {
-    isRunning.value = true;
-    intervalId = setInterval(updateTime, 1000);
+  if (!isCounting.value) {
+    isCounting.value = true;
+    interval = setInterval(updateTime, 1000);
+    $flashMsg.info({
+      text: `The timer started`,
+    });
   }
 }
 function pauseTimer() {
-  isRunning.value = false;
-  clearInterval(intervalId);
+  isCounting.value = false;
+  $flashMsg.warning({
+    text: `The timer stopped`,
+  });
+
+  clearInterval(interval);
+  localStorage.setItem(
+    `${props.todo.text}-timer`,
+    JSON.stringify({ sec: sec.value, isCounting: isCounting.value })
+  );
 }
+onMounted(() => {
+  const storedTime = JSON.parse(
+    localStorage.getItem(`${props.todo.text}-timer`)
+  );
+  if (storedTime) {
+    sec.value = storedTime.sec || 0;
+    isCounting.value = storedTime.isCounting || false;
+    seconds.value = pad(sec.value % 60);
+    minutes.value = pad(Math.floor(sec.value / 60) % 60);
+    hours.value = pad(Math.floor(sec.value / 3600));
+    if (isCounting.value) {
+      interval = setInterval(updateTime, 1000);
+    }
+  }
+});
 </script>
 
 <template>
@@ -81,21 +111,11 @@ function pauseTimer() {
             >:<span>{{ minutes }}</span
             >:<span>{{ seconds }}</span>
           </div>
-          <v-btn flat class="ms-2">
-            <v-icon
-              icon="mdi-play"
-              color="black"
-              v-bind="props"
-              @click="startTimer"
-              v-if="!isRunning"
-            ></v-icon>
-            <v-icon
-              icon="mdi-pause"
-              color="black"
-              v-bind="props"
-              @click="pauseTimer"
-              v-else-if="isRunning"
-            ></v-icon>
+          <v-btn v-if="!isCounting" flat class="ms-2" @click="startTimer">
+            <v-icon icon="mdi-play" color="black" v-bind="props"></v-icon>
+          </v-btn>
+          <v-btn class="ms-2" flat v-else-if="isCounting" @click="pauseTimer">
+            <v-icon icon="mdi-pause" color="black" v-bind="props"></v-icon>
           </v-btn>
         </div>
         <v-btn flat @click="deleteTodo">
